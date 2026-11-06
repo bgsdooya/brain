@@ -44,7 +44,8 @@ h2.sec{font-size:1.5rem;margin:.3rem 0 .2rem;font-weight:800;color:var(--ink)}
 .m b{display:block;font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
 .m small{display:block;font-size:.9rem;opacity:.9;margin-top:.1rem}
 .m .go{margin-left:auto;font-size:1.6rem;opacity:.75}
-.m.home{background:var(--str)} .m.all{background:var(--purple)} .m.slide{background:#51607A}
+.m.wk1{background:var(--purple)} .m.all{background:var(--str)} .m.slide{background:#3F5068}
+.m .ic{font-weight:800}
 
 /* 상단바 */
 .bar{position:sticky;top:0;z-index:15;background:var(--paper);padding:.6rem 0 .7rem;
@@ -119,43 +120,44 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
 <main>
   <!-- 홈 -->
   <section id="home" class="view on">
-    <h2 class="sec">1주차 운동</h2>
-    <p class="lead">보고 싶은 것을 눌러주세요</p>
+    <h2 class="sec">배운 내용 다시 보기</h2>
+    <p class="lead">회차를 눌러주세요</p>
     <div class="menu">
-      <button class="m home" onclick="go('hp')">
-        <div class="ic">★</div>
-        <div><b>집에서 하실 3가지</b><small>매일 하실 운동</small></div>
-        <div class="go">›</div>
-      </button>
-      <button class="m all" onclick="go('all')">
-        <div class="ic">▦</div>
-        <div><b>오늘 배운 운동 전부</b><small>준비운동부터 머리 쓰는 운동까지</small></div>
-        <div class="go">›</div>
-      </button>
-      <button class="m slide" onclick="go('sl')">
-        <div class="ic">▭</div>
-        <div><b>수업 화면 다시 보기</b><small>전체 22장</small></div>
+      <button class="m wk1" onclick="go('w1')">
+        <div class="ic">1주</div>
+        <div><b>뇌졸중 알기</b><small>FAST · 119 · 운동</small></div>
         <div class="go">›</div>
       </button>
     </div>
   </section>
 
-  <!-- 집에서 하실 3가지 -->
-  <section id="hp" class="view">
-    <div class="bar"><button class="back" onclick="go('home')">← 뒤로</button><b>집에서 하실 3가지</b></div>
-    <div class="hint">언제 하실지 정하세요 — 아침 드시고 / TV 광고 때 / 자기 전</div>
-    <div id="hpList"></div>
+  <!-- 1주차 메뉴 -->
+  <section id="w1" class="view">
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>1주차 뇌졸중 알기</b></div>
+    <div class="menu">
+      <button class="m slide" onclick="go('sl')">
+        <div class="ic">▭</div>
+        <div><b>수업 화면 다시 보기</b><small>전체 22장 · 옆으로 돌려서 보세요</small></div>
+        <div class="go">›</div>
+      </button>
+      <button class="m all" onclick="go('all')">
+        <div class="ic">▦</div>
+        <div><b>오늘 배운 운동</b><small>글씨 크게 · 하나씩 보기</small></div>
+        <div class="go">›</div>
+      </button>
+    </div>
   </section>
+
 
   <!-- 전체 운동 -->
   <section id="all" class="view">
-    <div class="bar"><button class="back" onclick="go('home')">← 뒤로</button><b>오늘 배운 운동</b></div>
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>오늘 배운 운동</b></div>
     <div id="allList"></div>
   </section>
 
   <!-- 슬라이드 -->
   <section id="sl" class="view">
-    <div class="bar"><button class="back" onclick="go('home')">← 뒤로</button><b>수업 화면</b></div>
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>수업 화면</b></div>
     <div class="rot">휴대폰을 옆으로 돌리면 크게 보입니다<br>그림을 누르면 꽉 차게 열립니다</div>
     <div class="slides" id="slList"></div>
   </section>
@@ -176,13 +178,8 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
 </div>
 
 <script>
-var VER = 2;
+var VER = 3;
 var EX = {
-  hp: [
-    {img:"ex/walk1.jpg", nm:"걷기", dose:"하루 10분부터", tip:"말은 되고 노래는 안 되는 속도로", c:"a"},
-    {img:"ex/str1.jpg",  nm:"앉았다 일어서기", dose:"10회", tip:"의자에서 · 엉덩이 먼저 뒤로", c:"s"},
-    {img:"ex/bal1.jpg",  nm:"두 발 모으고 서기", dose:"30초 × 2회", tip:"싱크대를 잡고 · 설거지하면서", c:"b"}
-  ],
   groups: [
     { t:"준비운동", c:"a", items:[
       {img:"ex/warm1.jpg", nm:"제자리 걷기", dose:"2분", tip:"팔을 크게 흔들며 숨이 조금 찰 정도로"},
@@ -239,7 +236,6 @@ function card(e, c){
        + '<div class="tip">'+e.tip+'</div></div></div>';
 }
 function build(){
-  document.getElementById("hpList").innerHTML = EX.hp.map(function(e){return card(e);}).join("");
   var h="";
   EX.groups.forEach(function(g){
     h += '<div class="grp '+g.c+'">'+g.t+'</div>';
@@ -253,18 +249,21 @@ function build(){
   }
   document.getElementById("slList").innerHTML = s;
 }
-var VIEWS = { home:1, hp:1, all:1, sl:1 };
-var came = false;
+var VIEWS  = { home:1, w1:1, sl:1, all:1 };
+var PARENT = { w1:"home", sl:"w1", all:"w1" };
+var moved = false;
 function show(id){
   document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("on"); });
   document.getElementById(id).classList.add("on");
   scrollTo(0,0);
 }
-function go(id){
-  if(id === "home"){
-    if(came){ came = false; history.back(); }
-    else { history.replaceState(null, "", location.pathname); show("home"); }
-  } else { came = true; location.hash = id; }
+function cur(){ var h = location.hash.replace("#",""); return VIEWS[h] ? h : "home"; }
+function go(id){ moved = true; location.hash = id; }
+function back(){
+  if(moved){ history.back(); return; }
+  var p = PARENT[cur()] || "home";
+  if(p === "home"){ history.replaceState(null, "", location.pathname); show("home"); }
+  else { location.replace("#" + p); }
 }
 function route(){
   var h = location.hash.replace("#","");
@@ -279,6 +278,7 @@ addEventListener("hashchange", function(){
 function zopen(src){
   document.getElementById("zimg").src = src;
   document.getElementById("zoom").classList.add("on");
+  moved = true;
   location.hash = "zoom";
 }
 function zclose(){
