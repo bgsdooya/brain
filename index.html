@@ -176,7 +176,7 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
 </div>
 
 <script>
-var VER = 1;
+var VER = 2;
 var EX = {
   hp: [
     {img:"ex/walk1.jpg", nm:"걷기", dose:"하루 10분부터", tip:"말은 되고 노래는 안 되는 속도로", c:"a"},
@@ -253,14 +253,38 @@ function build(){
   }
   document.getElementById("slList").innerHTML = s;
 }
-function go(id){
+var VIEWS = { home:1, hp:1, all:1, sl:1 };
+var came = false;
+function show(id){
   document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("on"); });
   document.getElementById(id).classList.add("on");
   scrollTo(0,0);
 }
-function zopen(src){ var z=document.getElementById("zoom");
-  document.getElementById("zimg").src=src; z.classList.add("on"); }
-function zclose(){ document.getElementById("zoom").classList.remove("on"); }
+function go(id){
+  if(id === "home"){
+    if(came){ came = false; history.back(); }
+    else { history.replaceState(null, "", location.pathname); show("home"); }
+  } else { came = true; location.hash = id; }
+}
+function route(){
+  var h = location.hash.replace("#","");
+  if(h === "zoom") return;
+  show(VIEWS[h] ? h : "home");
+}
+addEventListener("hashchange", function(){
+  var z = document.getElementById("zoom");
+  if(z.classList.contains("on") && location.hash !== "#zoom"){ z.classList.remove("on"); return; }
+  route();
+});
+function zopen(src){
+  document.getElementById("zimg").src = src;
+  document.getElementById("zoom").classList.add("on");
+  location.hash = "zoom";
+}
+function zclose(){
+  if(location.hash === "#zoom") history.back();
+  else document.getElementById("zoom").classList.remove("on");
+}
 
 var s = 1;
 try { s = parseFloat(localStorage.getItem("bs")) || 1; } catch(e){}
@@ -278,6 +302,7 @@ addEventListener("scroll", function(){
   document.getElementById("top").style.display = scrollY > 600 ? "block" : "none";
 });
 build();
+route();
 </script>
 </body>
 </html>
