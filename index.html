@@ -44,7 +44,7 @@ h2.sec{font-size:1.5rem;margin:.3rem 0 .2rem;font-weight:800;color:var(--ink)}
 .m b{display:block;font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
 .m small{display:block;font-size:.9rem;opacity:.9;margin-top:.1rem}
 .m .go{margin-left:auto;font-size:1.6rem;opacity:.75}
-.m.wk1{background:var(--purple)} .m.wk2{background:var(--aero)} .m.wk3{background:var(--bal)} .m.all{background:var(--str)} .m.slide{background:#3F5068}
+.m.wk1{background:var(--purple)} .m.wk2{background:var(--aero)} .m.wk3{background:var(--bal)} .m.wk4{background:var(--str)} .m.all{background:var(--str)} .m.slide{background:#3F5068}
 .m .ic{font-weight:800}
 
 /* 상단바 */
@@ -142,6 +142,11 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
         <div><b>파킨슨병</b><small>떨림 구분 · 크게 움직이기</small></div>
         <div class="go">›</div>
       </button>
+      <button class="m wk4" onclick="go('w4')">
+        <div class="ic">4주</div>
+        <div><b>치매와 운동</b><small>건망증 구분 · 내 것 세 가지</small></div>
+        <div class="go">›</div>
+      </button>
     </div>
   </section>
 
@@ -197,6 +202,23 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
     </div>
   </section>
 
+  <!-- 4주차 메뉴 -->
+  <section id="w4" class="view">
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>4주차 치매와 운동</b></div>
+    <div class="menu">
+      <button class="m slide" onclick="go('sl4')">
+        <div class="ic">▭</div>
+        <div><b>수업 화면 다시 보기</b><small>전체 22장 · 그림을 누르면 커집니다</small></div>
+        <div class="go">›</div>
+      </button>
+      <button class="m all" onclick="go('all4')">
+        <div class="ic">▦</div>
+        <div><b>집에서 하실 운동</b><small>네 주 동안 배운 것 전부</small></div>
+        <div class="go">›</div>
+      </button>
+    </div>
+  </section>
+
   <!-- 전체 운동 -->
   <section id="all" class="view">
     <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>오늘 배운 운동</b></div>
@@ -229,6 +251,16 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
     <div class="rot">그림을 누르면 <b>화면에 꽉 차게</b> 열립니다<br>손가락으로 더 크게 늘릴 수도 있습니다</div>
     <div class="slides" id="slList3"></div>
   </section>
+  <section id="all4" class="view">
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>집에서 하실 운동</b></div>
+    <div id="allList4"></div>
+  </section>
+
+  <section id="sl4" class="view">
+    <div class="bar"><button class="back" onclick="back()">← 뒤로</button><b>4주차 수업 화면</b></div>
+    <div class="rot">그림을 누르면 <b>화면에 꽉 차게</b> 열립니다<br>손가락으로 더 크게 늘릴 수도 있습니다</div>
+    <div class="slides" id="slList4"></div>
+  </section>
 </main>
 
 <footer>
@@ -246,8 +278,49 @@ footer .t{display:inline-block;margin-top:.5rem;color:#8A82A0;font-size:.85rem}
 </div>
 
 <script>
-var VER = 11;
+var VER = 12;
 var EX = {
+  groups4: [
+    { t:"준비운동", c:"a", items:[
+      {img:"ex/w3_warm1.jpg", nm:"제자리 걷기", dose:"2분", tip:"팔을 크게 흔들며 숨이 조금 찰 정도로"},
+      {img:"ex/w3_warm2.jpg", nm:"어깨 · 팔 돌리기", dose:"각 10회", tip:"크게, 천천히"},
+      {img:"ex/w3_warm3.jpg", nm:"몸통 좌우 돌리기", dose:"각 10회", tip:"엉덩이는 앞을 보고 몸통만 돌리기"},
+      {img:"ex/w3_warm4.jpg", nm:"종아리 늘리기", dose:"20초 × 2", tip:"벽을 짚고 뒤꿈치를 바닥에 붙인 채"}
+    ]},
+    { t:"① 걷기", c:"a", items:[
+      {img:"ex/w3_walk1.jpg", nm:"제자리 걷기", dose:"1분", tip:"팔을 크게 흔들며 보폭도 크게"},
+      {img:"ex/w3_walk2.jpg", nm:"무릎 높이 들며 걷기", dose:"1분", tip:"무릎을 허리 높이까지 더 높게"},
+      {img:"ex/w3_walk3.jpg", nm:"앞뒤로 두 걸음씩", dose:"1분", tip:"평소보다 한 뼘 더 크게 내딛기"},
+      {img:"ex/w3_walk4.jpg", nm:"박자에 맞춰 걷기", dose:"1분", tip:"하나 둘 하나 둘 — 구령에 맞춰 크게"}
+    ]},
+    { t:"② 근육 쓰기", c:"s", items:[
+      {img:"ex/w3_str1.jpg", nm:"앉았다 일어서기", dose:"10회 × 2", tip:"팔짱 끼고 · 앉을 때 5초"},
+      {img:"ex/w3_str2.jpg", nm:"반만 일어나 버티기", dose:"10회", tip:"엉덩이를 살짝 떼고 5초 버티기"},
+      {img:"ex/w3_str3.jpg", nm:"밴드 노 젓기", dose:"10회 × 2", tip:"짧게 잡고 돌아올 때도 3초"},
+      {img:"ex/w3_str4.jpg", nm:"뒤꿈치 들기", dose:"10회 × 2", tip:"한 손만 잡고 내릴 때 3초"},
+      {img:"ex/w3_str5.jpg", nm:"루프밴드 다리 옆으로", dose:"좌우 10회", tip:"한 손만 잡고 천천히 돌아오기"}
+    ]},
+    { t:"③ 균형 — 네 단계 중 되시는 데까지", c:"b", items:[
+      {img:"ex/w3_bal1.jpg", nm:"1단계 · 두 발 모으고 서기", dose:"30초 × 2회", tip:"눈 감고 45초까지"},
+      {img:"ex/w3_bal2.jpg", nm:"2단계 · 일자로 서기", dose:"좌우 30초", tip:"눈 감고 (되시는 분만)"},
+      {img:"ex/w3_bal3.jpg", nm:"3단계 · 한 발로 서기", dose:"좌우 30초", tip:"고개를 좌우로 돌리며"},
+      {img:"ex/w3_bal4.jpg", nm:"4단계 · 발란스패드 위에서", dose:"되시는 분만", tip:"패드 위에 두 발로 올라서서 눈 감고 · 집에서는 방석이나 접은 이불로"}
+    ]},
+    { t:"③ 균형 — 움직이면서", c:"b", items:[
+      {img:"ex/w3_dyn1.jpg", nm:"십자 걸음", dose:"각 방향 3회", tip:"앞 · 오른쪽 · 왼쪽 · 뒤로 크게 한 발씩 갔다가 제자리로 · 한 방향씩 천천히, 뒤는 짧게"},
+      {img:"ex/w3_dyn2.jpg", nm:"제자리 걷다가 멈추기", dose:"10회", tip:"'멈추세요' 하면 그 자리에서 정지"},
+      {img:"ex/w3_dyn3.jpg", nm:"의자 크게 돌아 앉기", dose:"좌우 2회씩", tip:"일어나서 의자 둘레를 크게 한 바퀴 돌고 다시 앉기 · 발을 꼬지 말고 넓게 · 앉기 전 손으로 의자 확인"},
+      {img:"ex/w3_dyn4.jpg", nm:"일자로 발 바꾸기", dose:"좌우 10회", tip:"의자를 잡고 뒤꿈치를 발가락 끝에 붙여서"}
+    ]},
+    { t:"④ 머리 쓰는 운동", c:"", items:[
+      {img:"ex/w3_cog1.jpg", nm:"박수 따라하기", dose:"", tip:"들리는 대로 따라 쳐보세요"},
+      {img:"ex/w3_cog2.jpg", nm:"발로 동그라미 손으로 네모", dose:"", tip:"같은 쪽 손발로 동시에 — 오른발로 바닥에 동그라미, 오른손으로 공중에 네모"},
+      {img:"ex/w3_cog3.jpg", nm:"손가락 숫자 바꾸기", dose:"", tip:"왼손은 하나씩 늘리고 오른손은 하나씩 줄이고"},
+      {img:"ex/w3_cog4.jpg", nm:"짝꿍과 손뼉 맞추기", dose:"", tip:"오른손끼리 · 왼손끼리 번갈아 마주쳐보기"},
+      {img:"ex/w3_cog5.jpg", nm:"앉았다 일어서며 숫자", dose:"", tip:"일어설 때마다 30부터 거꾸로"},
+      {img:"ex/w3_cog6.jpg", nm:"끝말잇기 걷기", dose:"", tip:"제자리 걸으면서 가족과 끝말잇기"}
+    ]}
+  ],
   groups3: [
     { t:"준비운동", c:"a", items:[
       {img:"ex/w3_warm1.jpg", nm:"제자리 걷기", dose:"2분", tip:"팔을 크게 흔들며 숨이 조금 찰 정도로"},
@@ -416,6 +489,12 @@ function build(){
     g.items.forEach(function(e){ h3 += card(e, g.c); });
   });
   document.getElementById("allList3").innerHTML = h3;
+  var h4="";
+  EX.groups4.forEach(function(g){
+    h4 += '<div class="grp '+g.c+'">'+g.t+'</div>';
+    g.items.forEach(function(e){ h4 += card(e, g.c); });
+  });
+  document.getElementById("allList4").innerHTML = h4;
   function sl(pre, cnt){
     var s="";
     for(var i=1;i<=cnt;i++){
@@ -427,9 +506,10 @@ function build(){
   document.getElementById("slList").innerHTML  = sl("w1", 22);
   document.getElementById("slList2").innerHTML = sl("w2", 20);
   document.getElementById("slList3").innerHTML = sl("w3", 20);
+  document.getElementById("slList4").innerHTML = sl("w4", 22);
 }
-var VIEWS  = { home:1, w1:1, sl:1, all:1, w2:1, sl2:1, all2:1, w3:1, sl3:1, all3:1 };
-var PARENT = { w1:"home", sl:"w1", all:"w1", w2:"home", sl2:"w2", all2:"w2", w3:"home", sl3:"w3", all3:"w3" };
+var VIEWS  = { home:1, w1:1, sl:1, all:1, w2:1, sl2:1, all2:1, w3:1, sl3:1, all3:1, w4:1, sl4:1, all4:1 };
+var PARENT = { w1:"home", sl:"w1", all:"w1", w2:"home", sl2:"w2", all2:"w2", w3:"home", sl3:"w3", all3:"w3", w4:"home", sl4:"w4", all4:"w4" };
 var moved = false;
 function show(id){
   document.querySelectorAll(".view").forEach(function(v){ v.classList.remove("on"); });
